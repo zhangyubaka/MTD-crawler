@@ -7,6 +7,8 @@ from pprint import pprint
 import asyncio
 import logging
 import coloredlogs
+import json
+import aiofiles
 
 logger = logging.getLogger()
 coloredlogs.install(logger=logger)
@@ -34,9 +36,11 @@ async def extract_links(page, xpath: str) -> list:
 async def main():
     # url = input('Please enter the url for scrapping: ')
     url = 'http://mac-torrent-download.net/'
+    output = 'output.json'
     sub_pages = await extract_links(await get_page(url), xpath='//dd/h3/a')
-    for i in sub_pages:
-        pprint(await extract_links(await get_page(i), xpath='//ul[@id="dl-btn"]//li//a'))
+    async with aiofiles.open(output,'w') as f:
+        for i in sub_pages:
+            json.dump(f, await extract_links(await get_page(i), xpath='//ul[@id="dl-btn"]//li//a'))
 
 
 if __name__ == '__main__':
