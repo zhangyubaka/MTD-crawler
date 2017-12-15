@@ -3,7 +3,6 @@
 
 import aiohttp
 from lxml import etree
-from pprint import pprint
 import asyncio
 import logging
 import coloredlogs
@@ -38,7 +37,7 @@ async def main():
     url = 'http://mac-torrent-download.net/'
     output = 'output.json'
     sub_pages = await extract_links(await get_page(url), xpath='//dd/h3/a')
-    async with aiofiles.open(output,'w') as f:
+    async with aiofiles.open(output, 'w') as f:
         for i in sub_pages:
             json.dump(f, await extract_links(await get_page(i), xpath='//ul[@id="dl-btn"]//li//a'))
 
